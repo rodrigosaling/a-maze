@@ -1,0 +1,38 @@
+{
+  "name": "a-maze",
+  "version": "0.1.0",
+  "description": "A multiplayer maze game.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.js",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rodrigosaling/a-maze.git"
+  },
+  "keywords": [
+    "game",
+    "multiplayer",
+    "javascript",
+    "maze"
+  ],
+  "author": "Rodrigo Saling <rodrigosaling@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rodrigosaling/a-maze/issues"
+  },
+  "homepage": "https://github.com/rodrigosaling/a-maze#readme",
+  "devDependencies": {
+    "eslint": "^8.10.0",
+    "eslint-config-prettier": "^8.5.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.5",
+    "prettier": "2.5.1",
+    "webpack": "^5.70.0"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  }
+}
