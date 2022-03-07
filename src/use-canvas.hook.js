@@ -10,7 +10,7 @@ export default function useCanvas(draw, options = {}, { predraw, postdraw }) {
     let animationFrameId;
     const render = () => {
       predraw(context, canvas);
-      draw(context, frameCount);
+      draw(context, canvas, frameCount);
       frameCount = postdraw(frameCount, context);
       animationFrameId = window.requestAnimationFrame(render);
     };
@@ -19,6 +19,6 @@ export default function useCanvas(draw, options = {}, { predraw, postdraw }) {
     return () => {
       window.cancelAnimationFrame(animationFrameId);
     };
-  }, [draw]);
+  }, [draw, options.context, postdraw, predraw]);
   return canvasRef;
 }

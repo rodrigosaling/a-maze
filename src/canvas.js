@@ -7,7 +7,7 @@ import postdraw from './postdraw';
 // and here: https://github.com/I-Can-Do-This/Canvas-with-React.js-Code/tree/master/src
 
 export default function Canvas(props) {
-  const { draw, options, ...rest } = props;
+  const { draw, options, setCanvasRef, ...rest } = props;
   const { context, ...moreConfig } = options;
   const canvasRef = useCanvas(draw, { context }, { predraw, postdraw });
 
