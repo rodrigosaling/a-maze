@@ -24,6 +24,17 @@ function generateMaze(size = 5) {
 
 const maze = generateMaze(mazeSize);
 
+function generateEmptyMatrix(size = 5) {
+  return Array(mazeSize).fill(null).map(() => Array(mazeSize).fill(null))
+}
+
+function generateMazeV2(size = 5) {
+  const matrix = generateEmptyMatrix();
+  const randomX = Math.floor(Math.random() * mazeSize)
+  const randomY = Math.floor(Math.random() * mazeSize)
+
+}
+
 // for (let x = 0; x < mazeSize; x++) {
 //   for (let y = 0; y < mazeSize; y++) {
 //     console.log(
