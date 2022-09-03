@@ -1,17 +1,28 @@
 {
   "name": "a-maze",
   "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rodrigosaling/a-maze.git"
+  },
+  "keywords": [
+    "maze",
+    "generator",
+    "javascript",
+    "html",
+    "canvas"
+  ],
+  "author": "Rodrigo Saling",
+  "license": "MIT",
   "private": true,
+  "bugs": {
+    "url": "https://github.com/rodrigosaling/a-maze/issues"
+  },
+  "homepage": "https://github.com/rodrigosaling/a-maze#readme",
   "source": "src/index.html",
   "scripts": {
     "start": "parcel",
     "build": "parcel build"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
@@ -26,6 +37,13 @@
     ]
   },
   "devDependencies": {
-    "parcel": "^2.7.0"
+    "eslint": "8.22.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "parcel": "^2.7.0",
+    "prettier": "2.7.1"
   }
 }
