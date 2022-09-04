@@ -73,7 +73,47 @@ function handleKeyUp(key) {
 
 document.addEventListener('keydown', (event) => handleKeyDown(event.key));
 document.addEventListener('keyup', (event) => handleKeyUp(event.key));
-const increment = 10;
+const increment = 2;
+
+const maze = [];
+const size = 10;
+
+function createMaze() {
+  for (let i = 0; i < size; i++) {
+    maze[i] = [];
+    for (let j = 0; j < size; j++) {
+      maze[i][j] = {
+        visited: false,
+        north: false,
+        east: false,
+        south: false,
+        west: false,
+      };
+    }
+  }
+  // console.log(maze);
+}
+
+createMaze();
+
+function getUnvisitedNeighbor(currentPosition) {
+  const [currentX, currentY] = currentPosition;
+  const max = 4;
+  const min = 1;
+  const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+  switch (randomNumber) {
+    case 1:
+      break;
+  }
+}
+
+function createPath(position) {
+  const [x, y] = position;
+  maze[x][y].visited = true;
+}
+
+createPath([0, 0]);
+
 (() => {
   function main() {
     MyGame.stopMain = window.requestAnimationFrame(main);
