@@ -113,7 +113,7 @@ function getUnvisitedNeighbor(currentPosition) {
   if (isSouthAvailable) availableNeighbors.push('south');
   if (isEastAvailable) availableNeighbors.push('east');
 
-  console.log(availableNeighbors);
+  // console.log(availableNeighbors);
 
   if (availableNeighbors.length === 0) {
     return null;
@@ -128,11 +128,11 @@ function getUnvisitedNeighbor(currentPosition) {
 
 function createPath(position) {
   const [x, y] = position;
-  console.log({ position });
+  // console.log({ position });
   maze[x][y].visited = true;
 
   let whereToGo = getUnvisitedNeighbor(position);
-  console.log(whereToGo);
+  // console.log(whereToGo);
 
   while (whereToGo !== null) {
     maze[x][y][whereToGo] = false;
