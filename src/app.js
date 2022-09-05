@@ -204,6 +204,24 @@ function drawMap(canvasContext) {
   }
 }
 
+// function removeRandomWalls() {
+//   for (let i = 0; i < 150; i += 1) {
+//     const min = 0;
+//     const max = size - 1;
+//     const randomX = Math.floor(Math.random() * (max - min + 1)) + min;
+//     const randomY = Math.floor(Math.random() * (max - min + 1)) + min;
+//
+//     const randomWall = Math.floor(Math.random() * 4) + 1;
+//     const walls = ['north', 'east', 'south', 'west'];
+//     maze[randomX][randomY][walls[randomWall]] = false;
+//   }
+// }
+//
+// removeRandomWalls();
+
+// TODO move the map to another canvas element
+drawMap(ctx);
+
 (() => {
   function main() {
     MyGame.stopMain = window.requestAnimationFrame(main);
@@ -215,8 +233,6 @@ function drawMap(canvasContext) {
     if (moveDown) squarePositionY += increment;
 
     ctx.fillRect(squarePositionX, squarePositionY, charSize, charSize);
-
-    drawMap(ctx);
   }
 
   main(); // Start the cycle
