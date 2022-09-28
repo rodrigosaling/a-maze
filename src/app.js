@@ -1,8 +1,13 @@
 const { body } = document;
 
-const canvas = document.createElement('canvas');
+const canvasWrapper = document.createElement('div');
+const canvasPlayers = document.createElement('canvas');
+const canvasMaze = document.createElement('canvas');
 
-body.appendChild(canvas);
+canvasWrapper.setAttribute('id', 'wrapper');
+body.appendChild(canvasWrapper);
+canvasWrapper.appendChild(canvasMaze);
+canvasWrapper.appendChild(canvasPlayers);
 
 let squarePositionX = 0;
 let squarePositionY = 0;
@@ -13,14 +18,22 @@ let moveRight = false;
 let moveDown = false;
 let moveLeft = false;
 
-canvas.setAttribute('width', '800px');
-canvas.setAttribute('height', '800px');
-const ctx = canvas.getContext('2d');
+canvasMaze.setAttribute('width', '800px');
+canvasMaze.setAttribute('height', '800px');
+const ctxMaze = canvasMaze.getContext('2d');
 
-const charSize = 15;
+canvasPlayers.setAttribute('width', '800px');
+canvasPlayers.setAttribute('height', '800px');
+const ctxPlayers = canvasPlayers.getContext('2d');
 
-ctx.fillStyle = 'rgb(216,71,83)';
-// ctx.fillRect(squarePositionX, squarePositionY, charSize, charSize);
+const lineWidth = 1;
+const playerSize = 10 - lineWidth * 2;
+const gridWidth = 20;
+const mazeSize = 30;
+const increment = 1;
+
+ctxPlayers.fillStyle = 'rgb(216,71,83)';
+// ctxPlayers.fillRect(squarePositionX, squarePositionY, playerSize, playerSize);
 
 function handleKeyDown(key) {
   // console.log(key);
@@ -75,17 +88,16 @@ function handleKeyUp(key) {
 
 document.addEventListener('keydown', (event) => handleKeyDown(event.key));
 document.addEventListener('keyup', (event) => handleKeyUp(event.key));
-const increment = 2;
 
 const maze = [];
-const size = 30;
 
 function createMaze() {
-  for (let i = 0; i < size; i += 1) {
+  for (let i = 0; i < mazeSize; i += 1) {
     maze[i] = [];
-    for (let j = 0; j < size; j += 1) {
+    for (let j = 0; j < mazeSize; j += 1) {
       maze[i][j] = {
         visited: false,
+        // true means wall
         north: true,
         east: true,
         south: true,
@@ -135,6 +147,7 @@ function createPath(position) {
   // console.log(whereToGo);
 
   while (whereToGo !== null) {
+    // false removes wall
     maze[x][y][whereToGo] = false;
     switch (whereToGo) {
       case 'north':
@@ -164,11 +177,11 @@ function createPath(position) {
 
 createPath([0, 0]);
 
-const gridWidth = 20;
-
 function drawMap(canvasContext) {
-  for (let x = 0; x < size; x += 1) {
-    for (let y = 0; y < size; y += 1) {
+  // eslint-disable-next-line no-param-reassign
+  canvasContext.lineWidth = lineWidth;
+  for (let x = 0; x < mazeSize; x += 1) {
+    for (let y = 0; y < mazeSize; y += 1) {
       const { north, east, south, west } = maze[x][y];
       if (north) {
         canvasContext.beginPath();
@@ -207,7 +220,7 @@ function drawMap(canvasContext) {
 // function removeRandomWalls() {
 //   for (let i = 0; i < 150; i += 1) {
 //     const min = 0;
-//     const max = size - 1;
+//     const max = mazeSize - 1;
 //     const randomX = Math.floor(Math.random() * (max - min + 1)) + min;
 //     const randomY = Math.floor(Math.random() * (max - min + 1)) + min;
 //
@@ -219,20 +232,117 @@ function drawMap(canvasContext) {
 //
 // removeRandomWalls();
 
-// TODO move the map to another canvas element
-drawMap(ctx);
+drawMap(ctxMaze);
+
+// center player on initial cell
+squarePositionX = (gridWidth - playerSize) / 2;
+squarePositionY = (gridWidth - playerSize) / 2;
 
 (() => {
   function main() {
     MyGame.stopMain = window.requestAnimationFrame(main);
     // Your main loop contents
-    ctx.clearRect(squarePositionX, squarePositionY, charSize, charSize);
-    if (moveLeft) squarePositionX -= increment;
-    if (moveRight) squarePositionX += increment;
-    if (moveUp) squarePositionY -= increment;
-    if (moveDown) squarePositionY += increment;
+    ctxPlayers.clearRect(
+      squarePositionX,
+      squarePositionY,
+      playerSize,
+      playerSize
+    );
 
-    ctx.fillRect(squarePositionX, squarePositionY, charSize, charSize);
+    // ---------------------------
+
+    const playerCenterPositionX = squarePositionX + playerSize / 2;
+    const playerCenterPositionY = squarePositionY + playerSize / 2;
+    const currentCellXBasedOnPlayer = Math.floor(
+      playerCenterPositionX / gridWidth
+    );
+    const currentCellYBasedOnPlayer = Math.floor(
+      playerCenterPositionY / gridWidth
+    );
+    const currentCell =
+      maze[currentCellXBasedOnPlayer][currentCellYBasedOnPlayer];
+
+    const currentCellCenterPositionX =
+      currentCellXBasedOnPlayer * gridWidth + gridWidth / 2;
+    const currentCellCenterPositionY =
+      currentCellYBasedOnPlayer * gridWidth + gridWidth / 2;
+
+    if (moveLeft) {
+      // ---------------------------
+      let minPositionX = gridWidth / 2;
+      const isThereAWall = currentCell.west;
+
+      if (isThereAWall) {
+        minPositionX = currentCellCenterPositionX;
+      }
+      if (playerCenterPositionX > minPositionX) {
+        squarePositionX -= increment;
+      }
+    }
+
+    if (moveRight) {
+      // ---------------------------
+      // can move right/east?
+      let maxPositionX = Infinity;
+
+      const isThereAWall = currentCell.east;
+
+      if (isThereAWall) {
+        maxPositionX = currentCellCenterPositionX;
+      }
+
+      if (playerCenterPositionX < maxPositionX) {
+        squarePositionX += increment;
+      }
+    }
+
+    if (moveUp) {
+      // ---------------------------
+      let minPositionY = gridWidth / 2;
+
+      const isThereAWall = currentCell.north;
+
+      if (isThereAWall) {
+        minPositionY = currentCellCenterPositionY;
+      }
+
+      if (playerCenterPositionY > minPositionY) {
+        squarePositionY -= increment;
+      }
+    }
+
+    if (moveDown) {
+      // ---------------------------
+      // can move down/south?
+      let maxPositionY = Infinity;
+
+      const isThereAWall = currentCell.south;
+
+      if (isThereAWall) {
+        maxPositionY = currentCellCenterPositionY;
+      }
+
+      // console.log({
+      //   playerCenterPositionX,
+      //   playerCenterPositionY,
+      //   currentCellXBasedOnPlayer,
+      //   currentCellYBasedOnPlayer,
+      //   isThereAWall,
+      //   maxPositionY,
+      //   currentCellCenterPositionY,
+      // });
+
+      if (playerCenterPositionY < maxPositionY) {
+        squarePositionY += increment;
+      }
+    }
+
+    ctxPlayers.fillRect(
+      squarePositionX,
+      squarePositionY,
+      playerSize,
+      playerSize
+    );
   }
 
   main(); // Start the cycle
